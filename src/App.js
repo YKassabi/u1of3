@@ -7,17 +7,18 @@ import Header from './Components/Header'
 class BooksApp extends Component {
   state = {
     showSearchPage: false,
-    ListOfBooks:{},
+    BookIdsByShelfs:{},
     isLoading: true,
     ShelfName:'',
-    BookIDCollection:{},//{[sfdsfsd:{title:.., img:.....},]}
+    BookByBookId:{},//{[sfdsfsd:{title:.., img:.....},]}
+    BooksShelfsUI:[]
   }
 
   /***
    * Function: Transforming the Raw Array to Obj with shelf as keys 
    */
-ObjByShelf = (Array) => {
-      let dataObjByShelf =  Array.reduce((obj, book)=>{
+MakingObjOfBookIdsByShelf = (ArrayAsParam) => {
+      let dataObjByShelf =  ArrayAsParam.reduce((obj, book)=>{
         obj[book.shelf] = obj[book.shelf] ? obj[book.shelf].concat(book.id) : []
         return obj
       },{})
@@ -32,7 +33,7 @@ ObjByShelf = (Array) => {
 /***
  * function Transforming Array to Obj with "ID" as Keys and {books} as values
  */
-ObjByID = (Array) => {
+MakingObjOfBooksByBookId = (Array) => {
         let dataObjByID = Array.reduce((obj, book) => {
           obj[book.id] = book
           return obj
@@ -47,7 +48,7 @@ ObjByID = (Array) => {
 BookIDToObj = (arrayOfIDs) => {
   console.log(arrayOfIDs)
   let a = arrayOfIDs.map(id=>{
-    return this.state.BookIDCollection[id]
+    return this.state.BookByBookId[id]
   })
   return a
 }
@@ -56,51 +57,74 @@ BookIDToObj = (arrayOfIDs) => {
  * Function to fetch all books. 
  * return then in array type
  */
-  gettingAllBooks = () => {
-    BooksAPI.getAll()
-      .then(dataArrayRaw=>{
-        let dataObjByShelf = this.ObjByShelf(dataArrayRaw)
-        let dataObjByID = this.ObjByID(dataArrayRaw)
-        // console.log(dataObjByID)
-        this.setState({
-          ListOfBooks: dataObjByShelf,
-          BookIDCollection: dataObjByID,
-          isLoading: false
+FetchingAllBooks = () => {
+  BooksAPI.getAll()
+    .then( dataArrayRaw =>{
+      let dataObjByShelf = this.MakingObjOfBookIdsByShelf(dataArrayRaw)
+      let dataObjByID = this.MakingObjOfBooksByBookId(dataArrayRaw)
+      this.setState({
+        BookIdsByShelfs: dataObjByShelf,
+        BookByBookId: dataObjByID,
+        isLoading: false
+      })
+      return dataObjByShelf;
+    })
+    .then(i => {
+      let uiShelfs = this.MakingBookShelfsFromBookId(i)
+      this.setState({
+          BooksShelfsUI: uiShelfs
       })
     })
-  }
+
+}
 
 
 updateBookShielf = (book, shelf) => {
   BooksAPI.update(book, shelf)
-    .then(data => {
-      return Object.keys(data).reduce((obj, k) => {
-        let array = data[k].map((id) => this.DictionaryWithIdAsKeys(id))
-        obj[k] = array
-        return obj
-      }, {})
+    .then(d => {
+        console.log('...d',d)
+      return d
     })
-    .then((updatedBooksObject) => {
+    .then((incomingUpdatedObj) => {
       this.setState(() => ({
-        updatedBooksObject
+        BookIdsByShelfs: incomingUpdatedObj
       }))
     })
 }
 
   componentDidMount(){
-    this.gettingAllBooks();
+    this.FetchingAllBooks();
   }
 
-transfromeriIdsToBooksObject = () => {
-        let arrayOfBookObj = this.state.ListOfBooks.currentlyReading.map(id => {
-          return this.state.BookIDCollection[id]
-        })
-        console.log(arrayOfBookObj)
-        return arrayOfBookObj;
+  MakingBookShelfsFromBookId = (L) => {
+        let list = L
+        return Object.keys(list).map(shelf =>{
+          let arrayOfBookObj = list[shelf].map(id =>this.state.BookByBookId[id])
+          return [shelf,arrayOfBookObj];
+        }) // [0: Array["read", (6)[…]]] ==> to get the books in read this.MakingBookShelfsFromBookId()[0][1]
+        // return FinalList
+        
 }
 
+
+componentWillReceiveProps(){
+  let FinalList = this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)
+  this.setState({
+    BooksShelfsUI: FinalList
+  })
+}
+
+
   render() {
-    this.state.isLoading? console.log('wait a bit') : (this.transfromeriIdsToBooksObject())
+    this.state.isLoading ? console.log('wait a bit') : (console.log(':>', this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)))
+    let Shelfs = this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)
+    console.log(Shelfs)
+    console.log('BookIdsByShelfs : ',this.state.BookIdsByShelfs);
+    console.log('BookByBookId :', this.state.BookByBookId);
+    console.log('BooksShelfsUI : ', this.state.BooksShelfsUI);
+    console.log('+_________________________________________+');
+
+    
     return (
       this.state.isLoading ? (<h2>Loading...</h2>) : (
       <div className="app">
@@ -120,8 +144,19 @@ transfromeriIdsToBooksObject = () => {
           <>
             <Header />
             <Shelf 
-            dataObjByShelf = {this.transfromeriIdsToBooksObject()}
-            title = {'Currently Reading...'}
+            dataObjByShelf = {Shelfs[0]}
+            title = {Shelfs[0][0]}
+            updateBookShielf = {this.updateBookShielf}
+            />
+            {/* <Shelf 
+            dataObjByShelf = {this.state.BooksShelfsUI[1]}
+            title = {this.state.BooksShelfsUI[1][0]}
+            updateBookShielf = {this.updateBookShielf}
+            />
+            <Shelf 
+            dataObjByShelf = {this.state.BooksShelfsUI[2]}
+            title = {this.state.BooksShelfsUI[2][0]}
+            updateBookShielf = {this.updateBookShielf} */}
             />
           </>
         )

@@ -2,22 +2,23 @@ import React,{Component} from 'react'
 import BookDetailButton from './BookDetailButton';
 
 class Shelf extends Component{
-    ShelfBooksArray = this.props.dataObjByShelf
-    title = this.props.title
+    currentShelf = this.props.dataObjByShelf[0] // 'read'
+    ShelfBooksArray = this.props.dataObjByShelf[1] // {title:... descriptio;....}
+    title = this.props.title // Read
 
-    menuGenerator = (parami) => {
-        let array = [{'read':'Read'}, {'currentlyReading':'Currently Reading'}, {'wantToRead':'Want to Read'}, {'none':'None'}]
+
+    // menuGenerator = (parami) => {
+    //     let array = [{'read':'Read'}, {'currentlyReading':'Currently Reading'}, {'wantToRead':'Want to Read'}, {'none':'None'}]
         
-        let htmlOutput = Object.keys(array).filter(i => i !== parami ).map((option)=>(
-            <p>.option.</p>
-        ))
-        console.log(htmlOutput)
-        return htmlOutput;
-    }
+    //     let htmlOutput = Object.keys(array).filter(i => i !== parami ).map((option)=>(
+    //         <p>.option.</p>
+    //     ))
+    //     console.log(htmlOutput)
+    //     return htmlOutput;
+    // }
 
 
     render(){
-    console.log(this.props.ShelfBooksArray)
         return (
             <>
             <div className="list-books-content">
@@ -32,9 +33,14 @@ class Shelf extends Component{
                                     <div className="book">
                                         <div className="book-top">
                                             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-                                            <BookDetailButton book={book}/>
+                                            <BookDetailButton 
+                                            book={book}
+                                            shelf={this.currentShelf}
+                                            updateBookShielf = {this.props.updateBookShielf}
+                                            />
                                         </div>
                                         <div className="book-title">{book.title}</div>
+                                        <div className="book-title">{book.shelf}</div>
                                         <div className="book-authors">{book.authors}</div>
                                     </div>
                                 </li>
@@ -42,7 +48,6 @@ class Shelf extends Component{
                         </ol>
                     </div>
                     </div>
-                <p>XXXXXXXXX</p>
                 </div>
                 </div>
                 <div className="open-search">
