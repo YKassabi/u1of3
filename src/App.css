@@ -1,3 +1,10 @@
+/*plaitnium  #e5e3e3
+* gainsboro #d8e2dc
+* mummy #808f85
+* #dark grey #2f4858
+* greenish #0a4c4a
+*/ 
+
 html,
 body,
 .root {
@@ -10,26 +17,35 @@ body {
 
 body,
 .app {
-  background: white;
+  background: #e5e3e3;
 }
 
 /* main page */
 
 .list-books-title {
   padding: 10px 0;
-  background: #2e7c31;
+  background: #808f85;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .list-books-title h1 {
   font-weight: 400;
   margin: 0;
-  color: white;
+text-transform: uppercase;
+letter-spacing: 1rem;
+  color: #e5e3e3;
 }
 
 .list-books-content {
   padding: 0 0 80px;
   flex: 1;
+  background: #d8e2dc;
+  border-bottom: 3px dotted black;
+  border-right: 3px dotted black;
+  color: #808f85;
+  border-radius: 3rem;
+
 }
 
 .bookshelf {
@@ -43,7 +59,13 @@ body,
 }
 
 .bookshelf-title {
-  border-bottom: 1px solid #dedede;
+  /* border-bottom: 1px solid #dedede; */
+  background:#0a4c4a;
+  display: inline;
+  padding: 10px;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 10px #999;
+
 }
 
 .bookshelf-books {
@@ -79,6 +101,7 @@ body,
   left: 0;
   z-index: 5;
   display: flex;
+  margin-top: 6rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 0 6px rgba(0, 0, 0, 0.23);
 }
 

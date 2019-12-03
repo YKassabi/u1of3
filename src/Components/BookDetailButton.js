@@ -15,12 +15,13 @@ state = {
 handleChange = (event) => {
     console.log(this.props.updateBookShielf(this.props.book, event.target.value))
     this.setState({currentShelf: event.target.value})
+    console.log('this the traget value:',event.target.value)
         this.props.updateBookShielf(this.props.book, this.props.shelf)
 }
 
 
 render() {
-    console.log('incoming from book detail button: ',this.props.book.shelf)
+    // console.log('incoming from book detail button: ',this.props.book.shelf)
 return (
     <div className="book-shelf-changer">
     <select value={this.state.value || this.props.shelf || ''} onChange={ this.handleChange}>

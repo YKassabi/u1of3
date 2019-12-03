@@ -1,8 +1,11 @@
 import React,{Component} from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
-import Shelf from './Components/Shelf'
-import Header from './Components/Header'
+import Shelf from './Components/Shelf';
+import Header from './Components/Header';
+import AddBook from './Components/AddBook';
+import {Route} from 'react-router-dom';
+
 
 class BooksApp extends Component {
   state = {
@@ -82,7 +85,7 @@ FetchingAllBooks = () => {
 updateBookShielf = (book, shelf) => {
   BooksAPI.update(book, shelf)
     .then(d => {
-        console.log('...d',d)
+        console.log('Raw Data after the update:',d)
       return d
     })
     .then((incomingUpdatedObj) => {
@@ -107,63 +110,32 @@ updateBookShielf = (book, shelf) => {
 }
 
 
-componentWillReceiveProps(){
-  let FinalList = this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)
-  this.setState({
-    BooksShelfsUI: FinalList
-  })
-}
-
-
   render() {
-    this.state.isLoading ? console.log('wait a bit') : (console.log(':>', this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)))
-    let Shelfs = this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)
-    console.log(Shelfs)
-    console.log('BookIdsByShelfs : ',this.state.BookIdsByShelfs);
-    console.log('BookByBookId :', this.state.BookByBookId);
-    console.log('BooksShelfsUI : ', this.state.BooksShelfsUI);
-    console.log('+_________________________________________+');
+      console.log(this.state.BookIdsByShelfs)
+      const Shelfs = this.MakingBookShelfsFromBookId(this.state.BookIdsByShelfs)
+      console.log(Shelfs)
 
-    
-    return (
-      this.state.isLoading ? (<h2>Loading...</h2>) : (
-      <div className="app">
-        {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
-              <div className="search-books-input-wrapper">
-                <input type="text" placeholder="Search by title or author"/>
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
-        ) : (
-          <>
+      return (
+        this.state.isLoading 
+        ? <h1>Loading...</h1> 
+        : <div className="app">
             <Header />
+          <Route exact path='/addnewbook' render={ () => (
+                <AddBook />
+          )} />
+
+          <Route exact path='/' render={ () => (
+            <>
             <Shelf 
-            dataObjByShelf = {Shelfs[0]}
-            title = {Shelfs[0][0]}
-            updateBookShielf = {this.updateBookShielf}
-            />
-            {/* <Shelf 
-            dataObjByShelf = {this.state.BooksShelfsUI[1]}
-            title = {this.state.BooksShelfsUI[1][0]}
-            updateBookShielf = {this.updateBookShielf}
-            />
-            <Shelf 
-            dataObjByShelf = {this.state.BooksShelfsUI[2]}
-            title = {this.state.BooksShelfsUI[2][0]}
-            updateBookShielf = {this.updateBookShielf} */}
-            />
-          </>
-        )
-        }
-      </div>
+                dataObjByShelf = {Shelfs[1]}
+                title = {Shelfs[1][0]}
+                updateBookShielf = {this.updateBookShielf}
+                />
+            </>
+          )} />
+          </div>
       )
-    )
+      }
   }
-}
+
 export default BooksApp
