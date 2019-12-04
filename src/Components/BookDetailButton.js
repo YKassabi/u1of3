@@ -10,11 +10,10 @@ state = {
 
 handleChange = (event) => {
     // console.log(this.props.updateBookShielf(this.props.book, event.target.value))
-    console.log(typeof(event.target.value))
     this.setState({currentShelf: event.target.value})
     console.log('this the traget value:',event.target.value)
     console.log('this the book:', this.props.book)
-        this.props.updateBookShielf(this.props.book, this.props.shelf)
+        this.props.updateBookShielf(this.props.book, event.target.value)
 }
 
 
