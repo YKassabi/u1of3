@@ -22,7 +22,6 @@ class BooksApp extends Component {
   state = {
     isLoading: true, // waiting for data to be fetched
     AllBooks: [], //[{book1},{book2}, {book3}]
-    BookByBookId:{},//{[sfdsfsd:{title:.., img:.....},]}
     AllShelfs: [], //{read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...} to use AllShelf.read or AllShelf.wantToRead
   }
 /***
@@ -33,15 +32,12 @@ class BooksApp extends Component {
 BooksArraySortedByShelfs = (arr=[]) => {
 //takes an array off all books and sorted by book.shelf
   let dataObjByShelf = arr.reduce((obj, book) => {
-    obj[book.shelf] = obj[book.shelf] ? obj[book.shelf].concat(book) : []
+    console.log(book.shelf)
+    obj[book.shelf] = obj[book.shelf] ? obj[book.shelf].concat(book) : [].concat(book)
     return obj
   }, {})
 
-  return {
-    read: [],
-    wantToRead: [],
-    currentlyReading: [],
-    none: [],
+  return {read:[],wantToRead:[], currentlyReading:[],
     ...dataObjByShelf
   } //{read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...}
 
@@ -54,53 +50,43 @@ BooksArraySortedByShelfs = (arr=[]) => {
  */
 ShelfsAfterUpdate = (UpdatedObjId) => {
 // step one make a dictionary 
-//// step two iterate through obj, then trhough array and find the book that corespond to the book ID
+// step two iterate through obj, then trhough array and find the book that corespond to the book ID
 // # 1  
-  let DictionaryBookID = this.AllBooks.reduce((obj, book) => {          
+  let DictionaryBookID = this.state.AllBooks.reduce((obj, book) => {          
                             obj[book.id] = book
                             return obj
                           }, {})      
 // # 2
-  return Object.keys(UpdatedObjId).reduce((obj, shelf)=>{
+  let newObject =  Object.keys(UpdatedObjId).reduce((obj, shelf)=>{
     obj[shelf] = UpdatedObjId[shelf].map(id => DictionaryBookID[id]);
     return obj;
   },{})
+  console.log("ShelfsAfterUpdate returned object: ", newObject)
+  return newObject;
 }
 
-////////////////////////////<><><><><><><><><><><><>////////////////////////////
-/***
- * making a function to convert {read:[id, id, id], wantToRead:[id,id,id]...}
- * to this [{title, img, id},{title, img, id}]
- */
-TransformerToArray = (paramObj) => {
-
-    let ArrayAllbooks = Object.keys(paramObj).reduce((arr,item)=>{
-      arr = [...arr, ...paramObj[item].map(i => this.state.BookByBookId[i])]
-    return arr
-  },[])
-  return ArrayAllbooks //[{title, img, id},{title, img, id}]
-}
-
-
+////////////////////////////<><><><><><>-<><><><><><>////////////////////////////
 
 FetchingAllBooks = () => {
   BooksAPI.getAll()
-    .then(AllBooks => {
+    .then( AllBooks => {
       this.setState({
         isLoading: false,
-        AllBooks,
-        AllShelfs: this.BooksArraySortedByShelfs(AllBooks) 
+        AllBooks: AllBooks,
+        AllShelfs: {...this.BooksArraySortedByShelfs(AllBooks) }
       })
     })
 }
 
 updateBookShielf = (book, shelf) => {
   book.shelf = shelf
+
   BooksAPI.update(book, shelf)
     .then(data => {
         this.setState({
-          ////
-        })
+          //changing the state 
+          AllShelfs: this.ShelfsAfterUpdate(data)
+        }, () => console.log("shelfs updated: ", this.state.AllShelfs))
     })
 }
 
@@ -124,13 +110,23 @@ updateBookShielf = (book, shelf) => {
             
             <Route exact path='/' render={ () => (
                 <>
-                    ////////////////////TESTING ///////////////
-                    {console.log(this.state.AllShelfs)}
-                    {console.log(this.state.AllBooks)}
-                    //////////////////////////////////////////
+                    {/* ////////////////////TESTING /////////////// */}
+                    {console.log("AllShelfs: ", this.state.AllShelfs)}
+                    {console.log('allBooks:' , this.state.AllBooks)}
+                    {/* ////////////////////////////////////////// */}
+                <Shelf 
+                    dataObjByShelf = {this.state.AllShelfs.wantToRead}
+                    title = {'Want To Read'}
+                    updateBookShielf = {this.updateBookShielf}
+                    />
+                <Shelf 
+                    dataObjByShelf = {this.state.AllShelfs.read}
+                    title = {'read'}
+                    updateBookShielf = {this.updateBookShielf}
+                    />
                 <Shelf 
                     dataObjByShelf = {this.state.AllShelfs.currentlyReading}
-                    title = {'read'}
+                    title = {'Currently Reading'}
                     updateBookShielf = {this.updateBookShielf}
                     />
                 {/* <Shelf 
