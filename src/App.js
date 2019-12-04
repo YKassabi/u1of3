@@ -16,6 +16,12 @@ class BooksApp extends Component {
     BooksShelfsUI:[]
   }
 
+
+Transformer = () => {}
+
+
+
+
   /***
    * Function: Transforming the Raw Array to Obj with shelf as keys 
    */
