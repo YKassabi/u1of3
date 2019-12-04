@@ -8,8 +8,9 @@ class Shelf extends Component{
     // currentShelf = this.props.dataObjByShelf // 'read'
     ShelfBooksArray = this.props.dataObjByShelf // {title:... descriptio;....}
     title = this.props.title // Read
-
+    
     render(){   
+        { console.log('incoming from the shelf', this.ShelfBooksArray)}
         // console.log('from shelf: ', this.porps.ShelfBooksArray)         
         return (
             <>

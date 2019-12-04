@@ -2,6 +2,8 @@ import React,{Component} from 'react';
 import {Link} from 'react-router-dom';
 import * as BooksAPI from '../BooksAPI';
 import NoResults from './NoResults'
+import PropTypes from 'prop-types';
+import Book from './Book'
 
 
 class AddBook extends Component{
@@ -40,7 +42,16 @@ class AddBook extends Component{
                     <div className="search-books-results">
                         <ol className="books-grid">
                             {this.state.ResponseList.map(book=>{
-                                return<li key = {book.id}>{book.title}</li>
+                                return<li key={book.id}>
+                                    <div>{book.shelf}</div>
+                                    <Book 
+                                        book={book}
+                                        currentShelf={'none'}
+                                        updateBookShielf = {
+                                            this.props.updateBookShielf
+                                        }
+                                    />
+                                </li>
                             })}
                         </ol>
                     </div>
@@ -53,5 +64,9 @@ class AddBook extends Component{
         )
     }
 }
+
+AddBook.propTypes = {
+    updateBookShielf: PropTypes.func,
+};
 
 export default AddBook
