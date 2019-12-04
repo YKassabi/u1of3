@@ -16,6 +16,12 @@ class BooksApp extends Component {
     BooksShelfsUI:[]
   }
 
+/***
+ * after updating shelf, function converting incoming data {read:[],wantTo:[]} to 
+ *  [{book1},{book2},{book2},{book3}] standard version used for the displya
+ */
+
+
   /***
    * Function: Transforming the Raw Array to Obj with shelf as keys 
    */
@@ -86,7 +92,10 @@ updateBookShielf = (book, shelf) => {
     .then(d => {
         console.log('Raw Data after the update:',d)
       return d
-    })
+    }).then(()=>{
+
+    }
+    )
     .then((incomingUpdatedObj) => {
       this.setState(() => ({
         BookIdsByShelfs: incomingUpdatedObj
