@@ -26,25 +26,30 @@ body,
   padding: 10px 0;
   background: #808f85;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
+  padding: 30px;
 }
 
-.list-books-title h1 {
+.list-books-title h1,
+.search-books h2 {
   font-weight: 400;
   margin: 0;
-text-transform: uppercase;
-letter-spacing: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1rem;
   color: #e5e3e3;
+  text-shadow: 5px 5px 5px darkslategray;
 }
 
 .list-books-content {
-  padding: 0 0 80px;
+  padding: 0 20px;
   flex: 1;
   background: #d8e2dc;
-  border-bottom: 3px dotted black;
-  border-right: 3px dotted black;
+  border-bottom: 3px dotted rgba(0, 0, 0, 0.16);
+  border-right: 3px dotted rgba(0, 0, 0, 0.16);
   color: #808f85;
   border-radius: 3rem;
+  margin-bottom: 2rem;
+  box-shadow: -5px -5px 10px #808f85;
 
 }
 
@@ -210,4 +215,17 @@ letter-spacing: 1rem;
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+
+.search-books h2{
+  text-align: center;
+  color: pink;
+}
+.noresultbox {
+  padding: 1rem;
+}
+.noresultbox hr{
+  width:60%;
+color: #0a4c4a;
 }

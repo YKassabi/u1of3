@@ -131,6 +131,16 @@ updateBookShielf = (book, shelf) => {
                 title = {Shelfs[1][0]}
                 updateBookShielf = {this.updateBookShielf}
                 />
+            <Shelf 
+                dataObjByShelf = {Shelfs[0]}
+                title = {Shelfs[0][0]}
+                updateBookShielf = {this.updateBookShielf}
+                />
+            <Shelf 
+                dataObjByShelf = {Shelfs[2]}
+                title = {Shelfs[2][0]}
+                updateBookShielf = {this.updateBookShielf}
+                />
             </>
           )} />
           </div>

@@ -1,3 +1,16 @@
+##
+________
+getAll => [{book1}, {book2}, {book3}, {book4}]
+upate  => {read:[], currentlyReading:[], wantToRead:[]}
+search => [{book1}, {book2}, {book3}, {book4}]
+_______
+
+function1 => { read:[], currentlyReading:[], wantToRead:[] } ==> [ {book1} , {book2} , {book3} , {book4} ]
+function2 => 
+function3 => 
+_______
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
