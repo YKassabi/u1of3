@@ -1,17 +1,16 @@
 import React,{Component} from 'react';
+import {Route} from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import Shelf from './Components/Shelf';
 import Header from './Components/Header';
 import AddBook from './Components/AddBook';
-import {Route} from 'react-router-dom';
 
 
 class BooksApp extends Component {
   state = {
-    showSearchPage: false,
+    isLoading: true, // waiting for data to be fetched
     BookIdsByShelfs:{},
-    isLoading: true,
     ShelfName:'',
     BookByBookId:{},//{[sfdsfsd:{title:.., img:.....},]}
     BooksShelfsUI:[]
@@ -101,12 +100,12 @@ updateBookShielf = (book, shelf) => {
 
   MakingBookShelfsFromBookId = (L) => {
         let list = L
-        return Object.keys(list).map(shelf =>{
+        return Object.keys(list).reduce((Obj, shelf) => {
           let arrayOfBookObj = list[shelf].map(id =>this.state.BookByBookId[id])
-          return [shelf,arrayOfBookObj];
-        }) // [0: Array["read", (6)[…]]] ==> to get the books in read this.MakingBookShelfsFromBookId()[0][1]
-        // return FinalList
-        
+          Obj[shelf] =  arrayOfBookObj;
+          return Obj
+        },{}) // [["read",[…]]] ==> to get the books in read this.MakingBookShelfsFromBookId()[0][1]
+          
 }
 
 
@@ -127,11 +126,11 @@ updateBookShielf = (book, shelf) => {
           <Route exact path='/' render={ () => (
             <>
             <Shelf 
-                dataObjByShelf = {Shelfs[1]}
-                title = {Shelfs[1][0]}
+                dataObjByShelf = {Shelfs.read}
+                title = {'read'}
                 updateBookShielf = {this.updateBookShielf}
                 />
-            <Shelf 
+            {/* <Shelf 
                 dataObjByShelf = {Shelfs[0]}
                 title = {Shelfs[0][0]}
                 updateBookShielf = {this.updateBookShielf}
@@ -140,7 +139,7 @@ updateBookShielf = (book, shelf) => {
                 dataObjByShelf = {Shelfs[2]}
                 title = {Shelfs[2][0]}
                 updateBookShielf = {this.updateBookShielf}
-                />
+                /> */}
             </>
           )} />
           </div>

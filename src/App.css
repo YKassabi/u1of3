@@ -48,8 +48,8 @@ body,
   border-right: 3px dotted rgba(0, 0, 0, 0.16);
   color: #808f85;
   border-radius: 3rem;
-  margin-bottom: 2rem;
   box-shadow: -5px -5px 10px #808f85;
+  margin: 0 2rem 2rem 2rem;
 
 }
 
@@ -65,7 +65,9 @@ body,
 
 .bookshelf-title {
   /* border-bottom: 1px solid #dedede; */
-  background:#0a4c4a;
+  /* background:#0a4c4a; */
+  background: linear-gradient(0.25turn, #f69c3c50, #0a4c4a, #f69c3c50);
+  color: #e5e3e3;
   display: inline;
   padding: 10px;
   border-radius: 1rem;

@@ -5,39 +5,44 @@ import Book from './Book'
 
 
 class Shelf extends Component{
-    currentShelf = this.props.dataObjByShelf[0] // 'read'
-    ShelfBooksArray = this.props.dataObjByShelf[1] // {title:... descriptio;....}
+    // currentShelf = this.props.dataObjByShelf // 'read'
+    ShelfBooksArray = this.props.dataObjByShelf // {title:... descriptio;....}
     title = this.props.title // Read
 
-    render(){            
+    render(){   
+        // console.log('from shelf: ', this.porps.ShelfBooksArray)         
         return (
             <>
-            <div className="list-books-content">
-                <div>
-                    <div className="bookshelf">
-                    <h2 className="bookshelf-title"> {this.title} </h2>
-                    <div className="bookshelf-books">
-                        <ol className="books-grid">
-                        {this.ShelfBooksArray.map((book)=>{
-                            return <Book 
-                            book={book}
-                            currentShelf={this.currentShelf}
-                            updateBookShielf={this.props.updateBookShielf}
-                            />
-                        })}
-                        </ol>
+                <div className="list-books-content">
+                    <div>
+                        <div className="bookshelf">
+                            <h2 className="bookshelf-title"> {this.title} </h2>
+                            <div className="bookshelf-books" key={this.title}>
+                                <ol className="books-grid">
+                                    {this.ShelfBooksArray.map((book)=>{
+                                        return <li key={book.id}>
+                                                    <div>{book.shelf}</div>
+                                                    <Book 
+                                                        book={book}
+                                                        currentShelf={book.shelf}
+                                                        updateBookShielf={this.props.updateBookShielf}
+                                                    />
+                                                </li>
+                                        
+                                    })}
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
                 </div>
                 <div className="open-search">
-                <Link 
-                    to='/addNewBook'
-                    className='open-search'
-                    onClick={() => this.setState({ showSearchPage: true })}>
-                >
-                Add New Book
-                </Link>
+                    <Link 
+                        to='/addNewBook'
+                        className='open-search'
+                        onClick={() => this.setState({ showSearchPage: true })}>
+                    >
+                        Add New Book
+                    </Link>
                 </div>
             </>
         )
