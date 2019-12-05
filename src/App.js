@@ -20,7 +20,6 @@ import Library from './Components/Library';
 class BooksApp extends Component {
 
     state = {
-        testingValue1: "Initial State",
         isLoading: true, // waiting for data to be fetched
         AllBooks: [], //[{book1},{book2}, {book3}]
         AllShelfs: {}, //{read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...} to use AllShelf.read or AllShelf.wantToRead
@@ -79,7 +78,6 @@ BooksAPI.getAll()
         AllBooks: AllBooks,
         AllShelfs: {...this.BooksArraySortedByShelfs(AllBooks) },
     })
-
     })
 }
 
@@ -88,31 +86,25 @@ shelfUIUpdater = (book, shelf) => {
 
     let shelfs_copy = Object.assign({}, this.state.AllShelfs);
     let oldShelf = book.shelf;
-    book.shelf = shelf; //changing the chelf attribute on the book
-    if(oldShelf){
+    let newShelf = shelf
+    book.shelf = newShelf; //changing the chelf attribute on the book
+    if(oldShelf){//just when the old shelf was in the library already
         // FROM: oldShelf
         shelfs_copy[oldShelf] = shelfs_copy[oldShelf].filter(_book => _book.id !== book.id) // remove that book from here
     }
-    //  TO: shelf 
-    shelfs_copy[shelf] = shelfs_copy[shelf].concat(book) // put new book here
+    if(newShelf !=='none'){ // no need to add book when we try to delete them , by moving them to  none catagory
+        //  TO: shelf 
+        shelfs_copy[newShelf] = shelfs_copy[newShelf].concat(book) // put new book here
+    }
 
     this.setState(prev => ({
-            testingValue1: prev.testingValue1 + "*",
             AllShelfs: shelfs_copy
-        }), () => {
-            // console.log("--> Updated shelfs: ", this.state.AllShelfs)
-        })
+        }))
 }
 
 updateBookShielf = (book, shelf) => {    
-    this.shelfUIUpdater(book,shelf)
-    
-
-    BooksAPI.update(book, shelf)
-    // .then((data)=>{
-    //     this.setState({
-    //         AllShelfs : this.ShelfsAfterUpdate(data)
-    //     }) 
+    this.shelfUIUpdater(book,shelf) // take care of the UI 
+    BooksAPI.update(book, shelf)    // Put to API to make the changes.
     }
 
 
@@ -141,6 +133,7 @@ render() {
             <Route exact path='/addnewbook' render={ () => (
                 <AddBook 
                 updateBookShielf = {this.updateBookShielf}
+                currentBookInTheLibrary = {this.state.AllBooks}
                 />
             )} />
             
@@ -148,10 +141,6 @@ render() {
                 render = {
                     () => (
                             <>
-                                {/* <h1>Initial testing Value: {this.state.testingValue1}</h1>
-                                <h1>wantToRead: {this.state.AllShelfs.wantToRead && this.state.AllShelfs.wantToRead.length &&  this.state.AllShelfs.wantToRead[0].title}</h1>
-                                <h1>Read:  {this.state.AllShelfs.read && this.state.AllShelfs.read.length &&  this.state.AllShelfs.read[0].shelf}</h1>  */}
-                                
                                 <Library 
                                     updateBookShielf={this.updateBookShielf}
                                     AllShelfs={this.state.AllShelfs}

@@ -3,9 +3,9 @@ import React from 'react';
 
 class BookDetailButton extends React.Component {
 
-state = {
-    currentShelf: null
-}
+// state = {
+//     currentShelf: null
+// }
 
 
 handleChange = (event) => {
@@ -21,7 +21,8 @@ render() {
     // console.log('incoming from book detail button: ',this.props.book.shelf)
 return (
     <div className="book-shelf-changer">
-        <select value={this.state.value || this.props.shelf || ''} onChange={(e)=>this.props.updateBookShielf(this.props.book, e.target.value)}>
+        <select value={ this.props.shelf || ''} onChange={(e)=>this.props.updateBookShielf(this.props.book, e.target.value)}>
+        {/* <select value={this.state.value || this.props.shelf || ''} onChange={(e)=>this.props.updateBookShielf(this.props.book, e.target.value)}> */}
             <option value="none" >Move to...</option>
             <option value="currentlyReading">Currently Reading</option>
             <option value="wantToRead">Want to Read</option>
