@@ -225,7 +225,7 @@ body,
 
 .search-books h2{
   text-align: center;
-  color: pink;
+  color: rgb(253, 101, 127);
 }
 .noresultbox {
   padding: 1rem;

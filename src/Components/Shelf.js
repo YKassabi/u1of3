@@ -4,7 +4,6 @@ import Book from './Book'
 
 
 const Shelf = ({shelfName, books,updateBookShielf}) => {
-    console.log(books)
 
     // generating the appropriete title
     shelfName = shelfName === 'read' ? 'Read' : (shelfName === 'wantToRead' ? 'Want To Read' : 'Currently Reading');

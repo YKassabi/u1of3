@@ -9,29 +9,26 @@ import Book from './Book'
 class AddBook extends Component{
 
     state = {
-                query: '',
-                responseList:[]
+        query: '',
+        responseList:[]
     }
     handleinput = (e) => {
         this.searchForBooks(e.target.value)
         this.setState({query:e.target.value})
     }
 
-componentDidMount() {
-    this.setState({
-        query : '',
-        responseList: []
-    })
-}
+    componentDidMount() {
+        this.setState({
+            query : '',
+            responseList: []
+        })
+    }
 
 
     searchForBooks= async (q) => {
         await BooksAPI.search(q)
         .then(incomingBooks=>{
-
-            console.log(this.props.currentBookInTheLibrary)
-            console.log(incomingBooks)
-            this.conpairSearchedBookWithExisting(incomingBooks, this.props.currentBookInTheLibrary)
+            incomingBooks && this.conpairSearchedBookWithExisting(incomingBooks, this.props.currentBookInTheLibrary)
             return incomingBooks
         })
         .then((fetchedData)=>
