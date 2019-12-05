@@ -1,48 +1,58 @@
 import React from 'react';
 import Shelf from './Shelf';
+import Book from './Book';
 import PropTypes from 'prop-types';
+import {
+    Link
+} from 'react-router-dom';
+
 
 
 const Library = (props) => {
-
     const allShelfs = props.AllShelfs;
-    const read = props.AllShelfs.read;
-    const wantToRead = props.AllShelfs.wantToRead;
-    const currentlyReading = props.AllShelfs.currentlyReading;
+    const {read, currentlyReading, wantToRead} = props.AllShelfs;
+    const read1 = props.AllShelfs.read;
+    const wantToRead1 = props.AllShelfs.wantToRead;
+    const currentlyReading1 = props.AllShelfs.currentlyReading;
         console.log('these are all shielfs All Shelf: ',  allShelfs)
         console.log('these are all shielfs READ: ',  read)
         console.log('these are all shielfs Currently Reading: ',  currentlyReading)
+
         return <>
-            <h1> Currently Reading: { props.AllShelfs.currentlyReading && props.AllShelfs.currentlyReading.length && `****/`} </h1>
-            <h1> Read: { props.AllShelfs.read && props.AllShelfs.read.length && (`/****`)}</h1>
-            {/* <ul>
-            { Object.keys(allShelfs).map((s)=>{
-                console.log(`${s} ==> `, allShelfs[s])
-                return <li key={s}>
-                    <Shelf 
-                            dataObjByShelf = {allShelfs[s]}
-                            title = {s}
-                            updateBookShielf = {props.updateBookShielf}
-                    />
-                </li>
-            })
-            }
-                </ul> */}
-            
-            <Shelf 
-                dataObjByShelf = {props.AllShelfs.read}
-                title = {' Read'}
-                updateBookShielf = {
-                    props.updateBookShielf
-                }
-                />
-            <Shelf 
-                dataObjByShelf = {props.AllShelfs.wantToRead}
-                title = {'Want to Read'}
-                updateBookShielf = {
-                    props.updateBookShielf
-                }
-                />
+            {Object.entries(allShelfs).map(([k, v])=>{
+                console.log( k, v )
+                return<div className="list-books-content">
+                            <div>
+                                <div className="bookshelf">
+                                    <h2 className="bookshelf-title">... {k}...</h2>
+                                    <div className="bookshelf-books" >
+                                        <ol className="books-grid">
+                                            { v.map((book)=>{
+                                                return <li key={book.id}>
+                                                            <div>{book.shelf}</div>
+                                                            <Book 
+                                                                book={book}
+                                                                currentShelf={book.shelf}
+                                                                updateBookShielf={props.updateBookShielf}
+                                                            />
+                                                        </li>
+                                                
+                                            })}
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            })}
+                            <div className="open-search">
+                    <Link 
+                        to='/addNewBook'
+                        className='open-search'
+                    >
+                        Add New Book
+                    </Link>
+                </div>
+
             </>
 }
 

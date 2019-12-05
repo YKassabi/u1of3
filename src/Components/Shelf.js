@@ -15,9 +15,7 @@ class Shelf extends Component{
         console.log(`incoming from the shelf array >>>`, this.ShelfBooksArray)
         return (
             <>
-                <h1> from the Shelf: {
-                    this.ShelfBooksArray && this.ShelfBooksArray.length && this.ShelfBooksArray[0].title
-                } </h1>
+                <h1> from the Shelf: { this.ShelfBooksArray && this.ShelfBooksArray.length && this.ShelfBooksArray[0].title} </h1>
 
                 <div className="list-books-content">
                     <div>

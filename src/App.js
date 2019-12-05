@@ -88,9 +88,11 @@ shelfUIUpdater = (book, shelf) => {
 
     let shelfs_copy = Object.assign({}, this.state.AllShelfs);
     let oldShelf = book.shelf;
-    book.shelf = shelf //changing the chelf attribute on the book
-    // FROM: oldShelf
-    shelfs_copy[oldShelf] = shelfs_copy[oldShelf].filter(_book => _book.id !== book.id) // remove that book from here
+    book.shelf = shelf; //changing the chelf attribute on the book
+    if(oldShelf){
+        // FROM: oldShelf
+        shelfs_copy[oldShelf] = shelfs_copy[oldShelf].filter(_book => _book.id !== book.id) // remove that book from here
+    }
     //  TO: shelf 
     shelfs_copy[shelf] = shelfs_copy[shelf].concat(book) // put new book here
 
