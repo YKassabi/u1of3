@@ -241,3 +241,8 @@ color: #0a4c4a;
   border-top: 1px dashed rgba(0, 0, 0, 0.23);
   /* border:3px solid red; */
 }
+.loading {
+  text-align: center;
+  margin-top: 7rem;
+  color: #0a4c4a;
+}

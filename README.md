@@ -1,11 +1,19 @@
 ##
-________
-getAll => [{book1}, {book2}, {book3}, {book4}]
-upate  => {read:[], currentlyReading:[], wantToRead:[]}
-search => [{book1}, {book2}, {book3}, {book4}]
-_______
 
-function1 => {read:[], currentlyReading:[], wantToRead:[]} +=> [{book1} , {book2} , {book3} , {book4}]
+- Data comming from GETALL API = [{book1},{book2}, {book3}] = fn: => Convert to  {read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...}
+- After an UPDATEAPI data we get data as :{read:[{book.id}, {Book2.id}, {Book3.id}], wantToRead:[{Book1.id}]...} =fn => 
+  - We will need convert to {read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...} //need dictionary of id:Book
+- Data Of the Search API comes in this format: [{book1},{book2}, {Book3}] no transformation needed because it will be just displayed as one iterated  array
+- => Display books on shelfs , will recieve an array of this format  [{book1},{book2}, {Book3}]  also it need to recieve title 
+- We will need to store data in this format /1/ {read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...}
+////////
+
+
+________
+- getAll => [{book1}, {book2}, {book3}, {book4}]
+- upate  => {read:[], currentlyReading:[], wantToRead:[]}
+- search => [{book1}, {book2}, {book3}, {book4}]
+
 _______
 
 

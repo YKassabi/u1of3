@@ -17,28 +17,42 @@ class AddBook extends Component{
         this.setState({query:e.target.value})
     }
 
-    searchForBooks=(q)=>{
-        BooksAPI.search(q)
-        .then(incomingBook=>{
+componentDidMount() {
+    this.setState({
+        query : '',
+        responseList: []
+    })
+}
+
+
+    searchForBooks= async (q) => {
+        await BooksAPI.search(q)
+        .then(incomingBooks=>{
+
             console.log(this.props.currentBookInTheLibrary)
-            this.conpairSearchedBookWithExisting(incomingBook, this.props.currentBookInTheLibrary)
-            console.log('this is the incoming ', incomingBook)
-            return incomingBook
+            console.log(incomingBooks)
+            this.conpairSearchedBookWithExisting(incomingBooks, this.props.currentBookInTheLibrary)
+            return incomingBooks
         })
         .then((fetchedData)=>
             this.setState({
                 responseList: fetchedData || []
             })
+        ).then(
+
         )
     }
-    conpairSearchedBookWithExisting = (arrSearch=[], arrLib=[]) => {
-        arrSearch &&  arrSearch.forEach(book1 => {
+    
+    conpairSearchedBookWithExisting = (arrSearch = [], arrLib = []) => {
+        if(arrSearch.length > 0 ){
+            arrSearch &&  arrSearch.forEach(book1 => {
                 arrLib.forEach( book2 => {
                     if(book1.id === book2.id) {
                         return book1.shelf = book2.shelf
                     }
                 })
             })
+        }
     }
 
     render(){
@@ -61,23 +75,23 @@ class AddBook extends Component{
                             <ol className="books-grid">
                                 {this.state.responseList.map(book=>{
                                     return<li key={book.id} >
-                                    <div >
-                                        { book.shelf && 
-                                                <div className='exist'>
-                                                        <Book
-                                                            book={book}
-                                                            currentShelf={book.shelf}
-                                                            updateBookShielf = {this.props.updateBookShielf }
-                                                        />
-                                                </div>
-                                        }
-                                        { !book.shelf && <Book
-                                                            book={book}
-                                                            currentShelf={book.shelf}
-                                                            updateBookShielf = {this.props.updateBookShielf }
-                                                        />}
-                                        
-                                    </div>
+                                        <div>
+                                            { book.shelf && 
+                                                    <div className='exist'>
+                                                            <Book
+                                                                book={book}
+                                                                currentShelf={book.shelf}
+                                                                updateBookShielf = {this.props.updateBookShielf }
+                                                            />
+                                                    </div>
+                                            }
+                                            { !book.shelf && <Book
+                                                                book={book}
+                                                                currentShelf={book.shelf}
+                                                                updateBookShielf = {this.props.updateBookShielf }
+                                                            />}
+                                            
+                                        </div>
                                     </li>
                                 })}
                             </ol>
