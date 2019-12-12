@@ -10,13 +10,10 @@ class Shelf extends Component{
     title = this.props.title // Read
     
     render(){   
-        console.info('-=-=-=-=-')
-        console.log(this.title)
-        console.log(`incoming from the shelf array >>>`, this.ShelfBooksArray)
+        { console.log('incoming from the shelf', this.ShelfBooksArray)}
+        // console.log('from shelf: ', this.porps.ShelfBooksArray)         
         return (
             <>
-                <h1> from the Shelf: { this.ShelfBooksArray && this.ShelfBooksArray.length && this.ShelfBooksArray[0].title} </h1>
-
                 <div className="list-books-content">
                     <div>
                         <div className="bookshelf">

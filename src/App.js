@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import Header from './Components/Header';
@@ -17,7 +17,7 @@ class BooksApp extends Component {
  * function to convert [{book1},{book2}, {book3}] to
  * {read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...}
  */
-BooksArraySortedByShelfs = (arr=[]) => {//takes an array off all books and sorted by book.shelf
+booksArraySortedByShelfs = (arr=[]) => {//takes an array off all books and sorted by book.shelf
     let dataObjByShelf = arr.reduce((obj, book) => {
         obj[book.shelf] = obj[book.shelf] ? obj[book.shelf].concat(book) : [].concat(book)
         return obj
@@ -27,33 +27,15 @@ BooksArraySortedByShelfs = (arr=[]) => {//takes an array off all books and sorte
     } //{read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...}
 
 }
-/****
- * use after the update
- * Function to convert {read:[{book.id}, {Book2.id}, {Book3.id}]}
- * to {read:[{book}, {Book2}, {Book3}], wantToRead:[{Book1}]...}
- * take an object shelfs, need to find books from the id  
- */
-ShelfsAfterUpdate = (updatedObjectID) => {
-    let dictionaryBookID = this.state.allBooks.reduce((obj, book) => { // step one make a dictionary 
-                                obj[book.id] = book
-                                return obj
-                            }, {})      
-    let newObject = Object.keys(updatedObjectID).reduce((obj, shelf) => { // step two iterate through obj, then trhough array and find the book that corespond to the book ID
-        obj[shelf] = updatedObjectID[shelf].map(id => dictionaryBookID[id]);
-        return obj;
-    },{})
-    return newObject;
-}
-
 ////////////////////////////<><><><><><>-<><><><><><>////////////////////////////
 
-FetchingAllBooks = () => {
+fetchingAllBooks = () => {
 BooksAPI.getAll()
     .then( allBooks => {
         this.setState({
             isLoading: false,
             allBooks,
-            allShelfs: {...this.BooksArraySortedByShelfs(allBooks) },
+            allShelfs: {...this.booksArraySortedByShelfs(allBooks) },
         })
     })
 }
@@ -64,7 +46,6 @@ shelfUIUpdater = (book, shelf) => {// moving book from oldshelf to the new shelf
     let oldShelf = book.shelf;
     let newShelf = shelf
     book.shelf = newShelf; //changing the chelf attribute on the book
-
     if(oldShelf){//just when the old shelf was in the library already
         shelfs_copy[oldShelf] = shelfs_copy[oldShelf].filter(_book => _book.id !== book.id) // remove that book from here
     }
@@ -83,7 +64,7 @@ updateBookShielf = (book, shelf) => {
 
 
 componentDidMount(){
-    this.FetchingAllBooks();
+    this.fetchingAllBooks();
 }
 
 ////////////////////////////<><><><><><>-<><><><><><>////////////////////////////
@@ -95,7 +76,8 @@ render() {
         ? <h1 className='loading'>Loading...</h1> 
         : <div className="app">
             <Header />
-            <Route exact path='/addnewbook' 
+            <Switch>
+            <Route exact path='/new' 
                 render={ () => (
                     <AddBook 
                         updateBookShielf = {this.updateBookShielf}
@@ -112,6 +94,7 @@ render() {
                     />
                 )} 
             />
+            </Switch>
         </div>
     )
     }

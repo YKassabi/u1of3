@@ -24,7 +24,7 @@ const Library = ({allShelfs, updateBookShielf}) => {
                 })}
                 <div className="open-search">
                     <Link 
-                        to='/addNewBook'
+                        to='/new'
                         className='open-search'
                     >
                         Add New Book
